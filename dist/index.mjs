@@ -148,6 +148,15 @@ var AgentsResource = class {
     return this.client.post("/agents/validate-publish", params);
   }
   /**
+   * Publish an agent: validate its persisted config and freeze it into the
+   * published snapshot the harness/review pipeline reads as the baseline.
+   * Returns `{ published: false, blockers }` (HTTP 200) when blockers remain —
+   * inspect `blockers` rather than relying on a thrown error.
+   */
+  async publish(agentId) {
+    return this.client.post(`/agents/${agentId}/publish`, {});
+  }
+  /**
    * Validate and apply a flat-diff change-set against the AgentConfig field registry.
    * Does NOT persist — callers must follow up with update().
    */

@@ -121,6 +121,26 @@ interface ValidatePublishParams {
     post_call?: any;
     [key: string]: any;
 }
+interface PublishValidationIssue {
+    severity?: string;
+    section?: string;
+    title?: string;
+    detail?: string;
+    [key: string]: any;
+}
+interface PublishAgentResponse {
+    published: boolean;
+    agent_id?: string;
+    /** Present when published — the frozen snapshot id and timestamp. */
+    snapshot_id?: string | null;
+    published_at?: string | null;
+    /** Present when published: false because of unresolved blockers. */
+    reason?: string;
+    blockers?: PublishValidationIssue[];
+    warnings?: PublishValidationIssue[];
+    error?: string;
+    details?: string;
+}
 interface ChangeEntry {
     key: string;
     value: any;
@@ -245,6 +265,13 @@ declare class AgentsResource {
      * Pass agent_id to merge with an existing persisted agent, or supply fields directly.
      */
     validatePublish(params: ValidatePublishParams): Promise<Record<string, any>>;
+    /**
+     * Publish an agent: validate its persisted config and freeze it into the
+     * published snapshot the harness/review pipeline reads as the baseline.
+     * Returns `{ published: false, blockers }` (HTTP 200) when blockers remain —
+     * inspect `blockers` rather than relying on a thrown error.
+     */
+    publish(agentId: string): Promise<PublishAgentResponse>;
     /**
      * Validate and apply a flat-diff change-set against the AgentConfig field registry.
      * Does NOT persist — callers must follow up with update().
@@ -760,4 +787,4 @@ declare class Rymi {
     constructor(options?: ClientOptions);
 }
 
-export { type AddKnowledgeSourceParams, type AgentCallListResponse, type AgentChange, type AgentKnowledgeSource, type AgentListResponse, type AgentTemplateSummary, AgentsResource, type ApplyChangesParams, type ApplyChangesResponse, type BatchCallParams, BillingResource, type CallListResponse, type CallRecord, CallsResource, type ChangeEntry, type ClientOptions, type ConnectTelephonyParams, type CreateAgentParams, type CreateCallParams, type CreateCallResponse, type CreatePublishableKeyParams, type DncCheckResult, type DncEntry, type DncListResponse, DncResource, type EnrichCompanyParams, type EnrichCompanyResponse, KeysResource, type ListCallsParams, type NumberRecord, NumbersResource, type PreviewStackParams, type PublishableKeyRecord, Rymi, RymiClient, RymiError, type TelephonyProvider, TelephonyResource, TemplatesResource, type UpdateAgentParams, type UsageSummary, type ValidatePublishParams, type WebhookRecord, WebhooksResource, Rymi as default };
+export { type AddKnowledgeSourceParams, type AgentCallListResponse, type AgentChange, type AgentKnowledgeSource, type AgentListResponse, type AgentTemplateSummary, AgentsResource, type ApplyChangesParams, type ApplyChangesResponse, type BatchCallParams, BillingResource, type CallListResponse, type CallRecord, CallsResource, type ChangeEntry, type ClientOptions, type ConnectTelephonyParams, type CreateAgentParams, type CreateCallParams, type CreateCallResponse, type CreatePublishableKeyParams, type DncCheckResult, type DncEntry, type DncListResponse, DncResource, type EnrichCompanyParams, type EnrichCompanyResponse, KeysResource, type ListCallsParams, type NumberRecord, NumbersResource, type PreviewStackParams, type PublishAgentResponse, type PublishValidationIssue, type PublishableKeyRecord, Rymi, RymiClient, RymiError, type TelephonyProvider, TelephonyResource, TemplatesResource, type UpdateAgentParams, type UsageSummary, type ValidatePublishParams, type WebhookRecord, WebhooksResource, Rymi as default };

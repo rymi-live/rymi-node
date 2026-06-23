@@ -99,6 +99,28 @@ export interface ValidatePublishParams {
     [key: string]: any;
 }
 
+export interface PublishValidationIssue {
+    severity?: string;
+    section?: string;
+    title?: string;
+    detail?: string;
+    [key: string]: any;
+}
+
+export interface PublishAgentResponse {
+    published: boolean;
+    agent_id?: string;
+    /** Present when published — the frozen snapshot id and timestamp. */
+    snapshot_id?: string | null;
+    published_at?: string | null;
+    /** Present when published: false because of unresolved blockers. */
+    reason?: string;
+    blockers?: PublishValidationIssue[];
+    warnings?: PublishValidationIssue[];
+    error?: string;
+    details?: string;
+}
+
 export interface ChangeEntry {
     key: string;
     value: any;
@@ -247,6 +269,16 @@ export class AgentsResource {
      */
     public async validatePublish(params: ValidatePublishParams): Promise<Record<string, any>> {
         return this.client.post('/agents/validate-publish', params);
+    }
+
+    /**
+     * Publish an agent: validate its persisted config and freeze it into the
+     * published snapshot the harness/review pipeline reads as the baseline.
+     * Returns `{ published: false, blockers }` (HTTP 200) when blockers remain —
+     * inspect `blockers` rather than relying on a thrown error.
+     */
+    public async publish(agentId: string): Promise<PublishAgentResponse> {
+        return this.client.post<PublishAgentResponse>(`/agents/${agentId}/publish`, {});
     }
 
     /**
