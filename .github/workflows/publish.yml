@@ -22,11 +22,8 @@ jobs:
       - name: Rewrite workspace deps for publish
         run: node scripts/prepare-publish.mjs
 
-      - name: Install dependencies
-        run: npm install
-
-      - name: Build
-        run: npm run build
+      - name: Verify prebuilt artifact exists
+        run: test -f dist/index.js && test -f dist/index.mjs && test -f dist/index.d.ts
 
       - name: Publish to npm
         run: npm publish --provenance --access public
