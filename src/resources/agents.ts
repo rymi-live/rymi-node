@@ -150,8 +150,6 @@ export interface EnrichCompanyResponse {
 }
 
 export interface PreviewStackParams {
-    /** Cost/capability role. `concierge` is not supported by this endpoint. */
-    role?: 'operator' | 'specialist' | 'executive';
     language?: string | null;
     /** Required, non-empty list of BCP-47 languages to resolve a stack for. */
     supported_languages: string[];
@@ -295,9 +293,8 @@ export class AgentsResource {
 
     /**
      * Preview the resolved per-language model stack (STT/LLM/TTS), blockers,
-     * warnings, model diffs, and any required role upgrades for a set of
-     * supported languages — without persisting anything. Note: the concierge
-     * (realtime) role is not supported by this endpoint.
+     * warnings, and model diffs for a set of supported languages — without
+     * persisting anything.
      */
     public async previewStack(params: PreviewStackParams): Promise<Record<string, any>> {
         return this.client.post('/agents/stack-preview', params);

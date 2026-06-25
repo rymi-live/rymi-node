@@ -220,9 +220,8 @@ var AgentsResource = class {
   }
   /**
    * Preview the resolved per-language model stack (STT/LLM/TTS), blockers,
-   * warnings, model diffs, and any required role upgrades for a set of
-   * supported languages — without persisting anything. Note: the concierge
-   * (realtime) role is not supported by this endpoint.
+   * warnings, and model diffs for a set of supported languages — without
+   * persisting anything.
    */
   async previewStack(params) {
     return this.client.post("/agents/stack-preview", params);
@@ -531,7 +530,7 @@ var BillingResource = class {
   async usageSummary() {
     return this.client.get("/billing/usage-summary");
   }
-  /** Estimate the cost of a call for a given tier and duration. */
+  /** Estimate the cost of a call for a custom model stack and duration. */
   async estimate(data = {}) {
     return this.client.post("/billing/estimate", data);
   }

@@ -30,8 +30,8 @@ export class BillingResource {
         return this.client.get<UsageSummary>('/billing/usage-summary');
     }
 
-    /** Estimate the cost of a call for a given tier and duration. */
-    public async estimate(data: { tier?: 'operator' | 'specialist' | 'executive' | 'concierge'; duration_seconds?: number } = {}): Promise<Record<string, any>> {
+    /** Estimate the cost of a call for a custom model stack and duration. */
+    public async estimate(data: { stt_model?: string; llm_model?: string; tts_model?: string; duration_seconds?: number } = {}): Promise<Record<string, any>> {
         return this.client.post('/billing/estimate', data);
     }
 
