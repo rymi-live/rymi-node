@@ -56,7 +56,6 @@ interface CreateAgentParams {
     custom_voice_url?: string | null;
     custom_voice_mode?: 'rymi' | 'openai-compat';
     custom_transcriber_url?: string | null;
-    agent_role?: 'operator' | 'specialist' | 'executive' | 'concierge';
     language?: string | null;
     /** All BCP-47 languages the agent should handle, e.g. ["hi-IN","en-US"] for a bilingual agent. */
     supported_languages?: string[];
@@ -90,7 +89,6 @@ interface UpdateAgentParams {
     custom_voice_url?: string | null;
     custom_voice_mode?: 'rymi' | 'openai-compat';
     custom_transcriber_url?: string | null;
-    agent_role?: 'operator' | 'specialist' | 'executive' | 'concierge';
     language?: string | null;
     /** All BCP-47 languages the agent should handle, e.g. ["hi-IN","en-US"] for a bilingual agent. */
     supported_languages?: string[];
@@ -168,7 +166,6 @@ interface EnrichCompanyResponse {
 }
 interface PreviewStackParams {
     /** Cost/capability role. `concierge` is not supported by this endpoint. */
-    agent_role?: 'operator' | 'specialist' | 'executive';
     role?: 'operator' | 'specialist' | 'executive';
     language?: string | null;
     /** Required, non-empty list of BCP-47 languages to resolve a stack for. */
