@@ -14,10 +14,10 @@ describe('BillingResource controls', () => {
   it('estimate() POSTs to /billing/estimate', async () => {
     mockJson({ estimated_minutes: 5 });
     const rymi = new Rymi({ apiKey: 'rymi_test' });
-    await rymi.billing.estimate({ tier: 'specialist', duration_seconds: 300 });
+    await rymi.billing.estimate({ llm_model: 'gemini-2.5-flash', duration_seconds: 300 });
     expect(global.fetch).toHaveBeenCalledWith(
       'https://api.rymi.live/v1/billing/estimate',
-      expect.objectContaining({ method: 'POST', body: JSON.stringify({ tier: 'specialist', duration_seconds: 300 }) })
+      expect.objectContaining({ method: 'POST', body: JSON.stringify({ llm_model: 'gemini-2.5-flash', duration_seconds: 300 }) })
     );
   });
 
