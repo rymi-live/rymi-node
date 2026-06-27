@@ -264,8 +264,20 @@ var AgentsResource = class {
    * the offline scorer; mode="live" runs the model-driven runner.
    */
   async runEvals(agentId, params = {}) {
-    const query = params.mode ? `?mode=${params.mode}` : "";
-    return this.client.post(`/agents/${agentId}/evals/run${query}`, {});
+    const query = new URLSearchParams();
+    if (params.mode) query.set("mode", params.mode);
+    if (params.judge) query.set("judge", "1");
+    const qs = query.toString();
+    return this.client.post(`/agents/${agentId}/evals/run${qs ? `?${qs}` : ""}`, {});
+  }
+  /**
+   * Run the eval SUITE across many agents at once (agents × seeded scenarios),
+   * bounded by the optional concurrency cap. One eval run is persisted per
+   * agent; the aggregate EvalSuiteReport is returned. Pass `judge: true` to
+   * supplement the heuristics with the opt-in LLM judge (needs a Gemini key).
+   */
+  async runEvalSuite(params) {
+    return this.client.post("/agents/evals/suite", params);
   }
   /**
    * List previous evaluation runs for an agent.

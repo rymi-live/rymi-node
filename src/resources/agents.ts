@@ -342,9 +342,30 @@ export class AgentsResource {
      * Run the evaluation suite for an agent. mode="synthetic" (default) uses
      * the offline scorer; mode="live" runs the model-driven runner.
      */
-    public async runEvals(agentId: string, params: { mode?: 'synthetic' | 'live' } = {}): Promise<Record<string, any>> {
-        const query = params.mode ? `?mode=${params.mode}` : '';
-        return this.client.post(`/agents/${agentId}/evals/run${query}`, {});
+    public async runEvals(
+        agentId: string,
+        params: { mode?: 'synthetic' | 'live'; judge?: boolean } = {},
+    ): Promise<Record<string, any>> {
+        const query = new URLSearchParams();
+        if (params.mode) query.set('mode', params.mode);
+        if (params.judge) query.set('judge', '1');
+        const qs = query.toString();
+        return this.client.post(`/agents/${agentId}/evals/run${qs ? `?${qs}` : ''}`, {});
+    }
+
+    /**
+     * Run the eval SUITE across many agents at once (agents × seeded scenarios),
+     * bounded by the optional concurrency cap. One eval run is persisted per
+     * agent; the aggregate EvalSuiteReport is returned. Pass `judge: true` to
+     * supplement the heuristics with the opt-in LLM judge (needs a Gemini key).
+     */
+    public async runEvalSuite(params: {
+        agentIds: string[];
+        scenarioIds?: string[];
+        concurrency?: number;
+        judge?: boolean;
+    }): Promise<Record<string, any>> {
+        return this.client.post('/agents/evals/suite', params);
     }
 
     /**
