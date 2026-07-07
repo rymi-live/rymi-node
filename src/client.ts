@@ -8,6 +8,12 @@ export interface ClientOptions {
      * The base URL for the API. Defaults to `https://api.rymi.live/v1`
      */
     baseURL?: string;
+
+    /**
+     * Custom fetch implementation. Lets embedders route requests without a
+     * network socket (e.g. Fastify app.inject). Defaults to global fetch.
+     */
+    fetch?: typeof globalThis.fetch;
 }
 
 export class RymiError extends Error {
@@ -25,18 +31,20 @@ export class RymiError extends Error {
 export class RymiClient {
     private apiKey: string;
     private baseURL: string;
+    private fetchImpl: typeof globalThis.fetch;
 
     constructor(options?: ClientOptions) {
         // Prefer explicit option, then fallback to environment variable
         const key = options?.apiKey || (typeof process !== 'undefined' ? process.env.RYMI_API_KEY : undefined);
-        
+
         if (!key) {
             throw new Error('The Rymi API Key must be set either by passing `apiKey` to the client or setting the `RYMI_API_KEY` environment variable.');
         }
 
         this.apiKey = key;
         this.baseURL = options?.baseURL || 'https://api.rymi.live/v1';
-        
+        this.fetchImpl = options?.fetch ?? globalThis.fetch;
+
         // Remove trailing slashes
         if (this.baseURL.endsWith('/')) {
             this.baseURL = this.baseURL.slice(0, -1);
@@ -63,7 +71,7 @@ export class RymiClient {
         }
 
         try {
-            const response = await fetch(url, init);
+            const response = await this.fetchImpl(url, init);
             const isJson = response.headers.get('content-type')?.includes('application/json');
             
             const data = isJson ? await response.json() : await response.text();
