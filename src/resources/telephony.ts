@@ -1,6 +1,6 @@
 import { RymiClient } from '../client';
 
-export type TelephonyProvider = 'plivo' | 'twilio' | 'vonage';
+export type TelephonyProvider = 'plivo' | 'twilio' | 'vonage' | 'telnyx';
 
 export interface ConnectTelephonyParams {
     provider: TelephonyProvider;
@@ -9,6 +9,8 @@ export interface ConnectTelephonyParams {
     api_key?: string;
     api_secret?: string;
     signature_secret?: string;
+    /** Telnyx Ed25519 webhook signing secret (optional). */
+    auth_secret?: string;
 }
 
 export class TelephonyResource {
