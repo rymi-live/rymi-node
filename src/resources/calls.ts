@@ -72,6 +72,27 @@ export interface BatchCallParams {
     post_call?: Record<string, any>;
 }
 
+export interface FanoutCallParams {
+    agent_id: string;
+    to?: string[];
+    recipients?: Array<{
+        to?: string;
+        identity?: string;
+        phone?: string;
+        phone_number?: string;
+        from_number?: string;
+        metadata?: Record<string, any>;
+    }>;
+    from_number?: string;
+    /** Preferred tracking id for this fanout. Falls back to batch_id, then auto-generated. */
+    fanout_id?: string;
+    /** Compatibility alias for fanout_id. */
+    batch_id?: string;
+    metadata?: Record<string, any>;
+    variables?: Record<string, any>;
+    post_call?: Record<string, any>;
+}
+
 export interface CreateCallResponse {
     id: string;
     room_name: string;
@@ -131,7 +152,17 @@ export class CallsResource {
     }
 
     /**
-     * Queue up to 500 outbound PSTN recipients in one request.
+     * Group call fanout: dial up to 500 PSTN participants into a single call room.
+     * Every recipient joins the same call. For independent per-recipient attempts,
+     * retries, and reports, use `campaigns` instead.
+     */
+    public async fanout(data: FanoutCallParams): Promise<CreateCallResponse & { fanout_id: string; batch_id: string; queued: number }> {
+        return this.client.post('/calls/fanout', data);
+    }
+
+    /**
+     * Compatibility alias for {@link fanout}. Creates one call room with multiple
+     * PSTN participants. Queue up to 500 outbound PSTN recipients in one request.
      */
     public async batch(data: BatchCallParams): Promise<CreateCallResponse & { batch_id: string; queued: number }> {
         return this.client.post('/calls/batch', data);

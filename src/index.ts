@@ -8,6 +8,9 @@ import { KeysResource } from './resources/keys';
 import { TelephonyResource } from './resources/telephony';
 import { BillingResource } from './resources/billing';
 import { TemplatesResource } from './resources/templates';
+import { CampaignsResource } from './resources/campaigns';
+import { ContactsResource } from './resources/contacts';
+import { ComplianceResource } from './resources/compliance';
 
 export class Rymi {
     private client: RymiClient;
@@ -21,6 +24,9 @@ export class Rymi {
     public telephony: TelephonyResource;
     public billing: BillingResource;
     public templates: TemplatesResource;
+    public campaigns: CampaignsResource;
+    public contacts: ContactsResource;
+    public compliance: ComplianceResource;
 
     constructor(options?: ClientOptions) {
         this.client = new RymiClient(options);
@@ -35,6 +41,9 @@ export class Rymi {
         this.telephony = new TelephonyResource(this.client);
         this.billing = new BillingResource(this.client);
         this.templates = new TemplatesResource(this.client);
+        this.campaigns = new CampaignsResource(this.client);
+        this.contacts = new ContactsResource(this.client);
+        this.compliance = new ComplianceResource(this.client);
     }
 }
 
@@ -49,6 +58,9 @@ export * from './resources/keys';
 export * from './resources/telephony';
 export * from './resources/billing';
 export * from './resources/templates';
+export * from './resources/campaigns';
+export * from './resources/contacts';
+export * from './resources/compliance';
 
 // Re-export the curated public type surface (see @rymi/sdk-types).
 export * from '@rymi/sdk-types';
