@@ -1,6 +1,6 @@
 # @rymi/node
 
-## 2.1.0
+## 2.0.0
 
 - Removed the four-tier role pricing from cost estimation. `billing.estimate()`
   now takes `{ stt_model, llm_model, tts_model, duration_seconds }` instead of a
