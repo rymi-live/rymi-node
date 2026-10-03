@@ -1,5 +1,5 @@
 import { RymiClient } from '../client';
-import { Agent } from '@rymi/sdk-types';
+import { Agent, AgentToolBinding } from '@rymi/sdk-types';
 
 export interface CreateAgentParams {
     name: string;
@@ -33,6 +33,7 @@ export interface CreateAgentParams {
     /** All BCP-47 languages the agent should handle, e.g. ["hi-IN","en-US"] for a bilingual agent. */
     supported_languages?: string[];
     provider_config?: any;
+    tools?: AgentToolBinding[];
 }
 
 export interface UpdateAgentParams {
@@ -68,6 +69,8 @@ export interface UpdateAgentParams {
     supported_languages?: string[];
     chat_summary?: string | null;
     provider_config?: any;
+    /** Replaces the whole bindings array — build it from a fresh retrieve(). */
+    tools?: AgentToolBinding[];
 }
 
 export interface AgentListResponse {
@@ -169,6 +172,35 @@ export interface AgentKnowledgeSource {
 export type AddKnowledgeSourceParams =
     | { kind: 'text'; title: string; text: string }
     | { kind: 'url'; title: string; url: string };
+
+/** A public share link: anyone with the URL can talk to the agent, billed to your workspace. */
+export interface AgentShareLink {
+    id: string;
+    url: string;
+    enabled: boolean;
+    minutes_limit: number;
+    minutes_used: number;
+    minutes_reserved: number;
+    minutes_remaining: number;
+    live_calls: number;
+    max_call_seconds: number;
+    max_concurrent: number;
+    calls_per_ip_hour: number;
+    minutes_requested_at: string | null;
+}
+
+/** All optional; omitted fields keep their current value (or the default on create). */
+export interface AgentShareLinkSettings {
+    enabled?: boolean;
+    /** Total talk-time pool for the link, 0–6000 minutes. */
+    minutes_limit?: number;
+    /** Per-call cap, 60–1800 seconds. */
+    max_call_seconds?: number;
+    /** Simultaneous calls, 1–10. */
+    max_concurrent?: number;
+    /** Calls per caller IP per hour, 1–30. */
+    calls_per_ip_hour?: number;
+}
 
 export interface AgentChange {
     change_id: string;
@@ -319,6 +351,29 @@ export class AgentsResource {
      */
     public async deleteKnowledgeSource(agentId: string, sourceId: string): Promise<Record<string, any>> {
         return this.client.delete(`/agents/${agentId}/knowledge-sources/${sourceId}`);
+    }
+
+    /**
+     * Get the agent's public share link, or `link: null` if none exists.
+     * `link_feature: false` means share links are disabled on this deployment.
+     */
+    public async getShareLink(agentId: string): Promise<{ link_feature: boolean; link: AgentShareLink | null }> {
+        const res = await this.client.get<{ link_feature: boolean; link: AgentShareLink | null }>(`/agents/${agentId}/testers`);
+        return { link_feature: res.link_feature, link: res.link };
+    }
+
+    /**
+     * Create the agent's public share link, or update its settings if one exists.
+     */
+    public async setShareLink(agentId: string, settings: AgentShareLinkSettings = {}): Promise<{ link: AgentShareLink }> {
+        return this.client.put(`/agents/${agentId}/share-link`, settings);
+    }
+
+    /**
+     * Issue a new URL for the share link. The old URL stops working immediately.
+     */
+    public async regenerateShareLink(agentId: string): Promise<{ link: AgentShareLink }> {
+        return this.client.post(`/agents/${agentId}/share-link/regenerate`, {});
     }
 
     /**

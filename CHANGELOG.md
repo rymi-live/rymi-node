@@ -1,5 +1,18 @@
 # @rymi/node
 
+## Unreleased
+
+## 2.1.0
+
+- New share-link methods on `agents`: `getShareLink(agentId)`,
+  `setShareLink(agentId, settings)` (create or update: `enabled`, `minutes_limit`,
+  `max_call_seconds`, `max_concurrent`, `calls_per_ip_hour`) and
+  `regenerateShareLink(agentId)` (new URL; the old one stops working).
+- `agents.create()` / `agents.update()` accept `tools` (the full bindings array;
+  build it from a fresh `retrieve()`), and `Agent` now types `tools`.
+- New `toolSecrets` resource: `list()`, `set(name, { value, host })`, `delete(name)`
+  for API-tool header secrets referenced as `{{secrets.NAME}}`.
+
 ## 2.0.0
 
 - Removed the four-tier role pricing from cost estimation. `billing.estimate()`

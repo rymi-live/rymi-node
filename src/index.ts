@@ -11,6 +11,7 @@ import { TemplatesResource } from './resources/templates';
 import { CampaignsResource } from './resources/campaigns';
 import { ContactsResource } from './resources/contacts';
 import { ComplianceResource } from './resources/compliance';
+import { ToolSecretsResource } from './resources/toolSecrets';
 
 export class Rymi {
     private client: RymiClient;
@@ -27,6 +28,7 @@ export class Rymi {
     public campaigns: CampaignsResource;
     public contacts: ContactsResource;
     public compliance: ComplianceResource;
+    public toolSecrets: ToolSecretsResource;
 
     constructor(options?: ClientOptions) {
         this.client = new RymiClient(options);
@@ -44,6 +46,7 @@ export class Rymi {
         this.campaigns = new CampaignsResource(this.client);
         this.contacts = new ContactsResource(this.client);
         this.compliance = new ComplianceResource(this.client);
+        this.toolSecrets = new ToolSecretsResource(this.client);
     }
 }
 
@@ -61,6 +64,7 @@ export * from './resources/templates';
 export * from './resources/campaigns';
 export * from './resources/contacts';
 export * from './resources/compliance';
+export * from './resources/toolSecrets';
 
 // Re-export the curated public type surface (see @rymi/sdk-types).
 export * from '@rymi/sdk-types';
