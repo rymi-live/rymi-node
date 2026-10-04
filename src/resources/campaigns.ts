@@ -319,15 +319,60 @@ export interface CampaignSuggestionListResponse {
     limit: number;
 }
 
+// ─── CampaignIntakeResource ──────────────────────────────────────────────────
+
+/** A campaign's lead-intake URL settings. The URL itself is only returned on create/rotate. */
+export interface CampaignIntake {
+    enabled: true;
+    assume_voice_consent: boolean;
+    default_country: string | null;
+    created_at: string;
+    rotated_at: string;
+    last_used_at: string | null;
+}
+
+export interface CampaignIntakeSettings {
+    /** Treat every lead posted to the URL as having voice consent (e.g. a subscribe form with a consent line). */
+    assume_voice_consent?: boolean;
+    /** ISO-3166 alpha-2 (e.g. "IN") used for numbers posted without a +country code. */
+    default_country?: string | null;
+}
+
+class CampaignIntakeResource {
+    constructor(private client: RymiClient) {}
+
+    /** Get the campaign's lead-intake settings, or `intake: null` if it has none. */
+    public async get(campaignId: string): Promise<{ intake: CampaignIntake | null }> {
+        return this.client.get(`/campaigns/${campaignId}/intake`);
+    }
+
+    /** Create the lead-intake URL (returned once as `url`), or update its settings (`url: null`). */
+    public async set(campaignId: string, settings: CampaignIntakeSettings = {}): Promise<{ intake: CampaignIntake; url: string | null }> {
+        return this.client.put(`/campaigns/${campaignId}/intake`, settings);
+    }
+
+    /** Issue a new URL. The old one stops accepting leads immediately. */
+    public async rotate(campaignId: string): Promise<{ intake: CampaignIntake; url: string }> {
+        return this.client.post(`/campaigns/${campaignId}/intake/rotate`, {});
+    }
+
+    /** Remove the lead-intake URL. */
+    public async disable(campaignId: string): Promise<void> {
+        return this.client.delete(`/campaigns/${campaignId}/intake`);
+    }
+}
+
 // ─── CampaignsResource ───────────────────────────────────────────────────────
 
 export class CampaignsResource {
     public members: CampaignMembersResource;
     public routes: CampaignRoutesResource;
+    public intake: CampaignIntakeResource;
 
     constructor(private client: RymiClient) {
         this.members = new CampaignMembersResource(client);
         this.routes = new CampaignRoutesResource(client);
+        this.intake = new CampaignIntakeResource(client);
     }
 
     /** List campaigns for the authenticated tenant, paginated. */

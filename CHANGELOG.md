@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- New `campaigns.intake` resource for a campaign's lead-intake URL: `get(id)`,
+  `set(id, { assume_voice_consent, default_country })` (returns `url` once, on create),
+  `rotate(id)` (new URL; the old one stops accepting leads) and `disable(id)`.
+
 ## 2.1.0
 
 - New share-link methods on `agents`: `getShareLink(agentId)`,

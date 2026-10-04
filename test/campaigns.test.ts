@@ -253,6 +253,29 @@ describe('CampaignsResource', () => {
     });
   });
 
+  describe('intake', () => {
+    it('intake.set() PUTs settings to /campaigns/:id/intake', async () => {
+      mockJson({ intake: { enabled: true }, url: 'https://api.rymi.live/v1/public/intake/rci_x' });
+      const rymi = new Rymi({ apiKey: 'rymi_test' });
+      const body = { assume_voice_consent: true, default_country: 'IN' };
+      await rymi.campaigns.intake.set('camp_1', body);
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${BASE}/campaigns/camp_1/intake`,
+        expect.objectContaining({ method: 'PUT', body: JSON.stringify(body) })
+      );
+    });
+
+    it('intake.rotate() POSTs /campaigns/:id/intake/rotate', async () => {
+      mockJson({ intake: { enabled: true }, url: 'u' });
+      const rymi = new Rymi({ apiKey: 'rymi_test' });
+      await rymi.campaigns.intake.rotate('camp_1');
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${BASE}/campaigns/camp_1/intake/rotate`,
+        expect.objectContaining({ method: 'POST' })
+      );
+    });
+  });
+
   describe('routes', () => {
     it('routes.list() GETs /campaigns/:id/routes', async () => {
       mockJson({ routes: [], total: 0, offset: 0, limit: 50 });
