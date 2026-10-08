@@ -82,7 +82,7 @@ The client exposes one namespace per resource group:
 | `contacts` | Contacts and per-channel consent |
 | `compliance` | Compliance attestations (e.g. an external DNC scrub) |
 | `toolSecrets` | Secrets for API-tool headers, referenced as `{{secrets.NAME}}` |
-| `workspaces` | List, create and rename workspaces. Pass `workspace` (or `RYMI_WORKSPACE`) to act in one of them. A workspace you create does not get the free monthly credit. You can own at most 20. |
+| `workspaces` | List, create and update workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`) to act in one of them. |
 
 ## 📖 Documentation
 

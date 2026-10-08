@@ -32,4 +32,23 @@ describe('workspaces', () => {
             ['https://api.rymi.live/v1/workspaces', 'POST', { name: 'Sarang', operating_country: 'IN' }]);
         expect([calls[2][0], calls[2][1].method]).toEqual(['https://api.rymi.live/v1/workspaces/w2', 'PATCH']);
     });
+
+    it('creates client workspaces, sets caps, reads usage and manages members', async () => {
+        const rymi = new Rymi({ apiKey: 'rymi_x' });
+        await rymi.workspaces.create({ name: 'Sarang', parent: 'agency-1' });
+        await rymi.workspaces.update('c1', { spend_cap_cents_monthly: 2000 });
+        await rymi.workspaces.usage('c1', { month: '2026-10' });
+        await rymi.workspaces.listMembers('c1');
+        await rymi.workspaces.addMember('c1', { email: 'guest@example.com' });
+        await rymi.workspaces.removeMember('c1', 'u2');
+        const calls = (global.fetch as any).mock.calls.map((c: any[]) => [c[0], c[1].method, c[1].body ? JSON.parse(c[1].body) : undefined]);
+        expect(calls).toEqual([
+            ['https://api.rymi.live/v1/workspaces', 'POST', { name: 'Sarang', parent: 'agency-1' }],
+            ['https://api.rymi.live/v1/workspaces/c1', 'PATCH', { spend_cap_cents_monthly: 2000 }],
+            ['https://api.rymi.live/v1/workspaces/c1/usage?month=2026-10', 'GET', undefined],
+            ['https://api.rymi.live/v1/workspaces/c1/members', 'GET', undefined],
+            ['https://api.rymi.live/v1/workspaces/c1/members', 'POST', { email: 'guest@example.com' }],
+            ['https://api.rymi.live/v1/workspaces/c1/members/u2', 'DELETE', undefined],
+        ]);
+    });
 });
