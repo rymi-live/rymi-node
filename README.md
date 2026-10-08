@@ -43,6 +43,9 @@ yarn add @rymi/node
 import { Rymi } from '@rymi/node';
 
 const rymi = new Rymi({ apiKey: process.env.RYMI_API_KEY });
+// Optional: act in another workspace you can reach.
+// const rymi = new Rymi({ apiKey: process.env.RYMI_API_KEY, workspace: 'workspace-id' });
+// Or set RYMI_WORKSPACE. The client sends it as the Rymi-Workspace header.
 
 // Create a voice agent
 const agent = await rymi.agents.create({
@@ -79,6 +82,7 @@ The client exposes one namespace per resource group:
 | `contacts` | Contacts and per-channel consent |
 | `compliance` | Compliance attestations (e.g. an external DNC scrub) |
 | `toolSecrets` | Secrets for API-tool headers, referenced as `{{secrets.NAME}}` |
+| `workspaces` | List, create and rename workspaces. Pass `workspace` (or `RYMI_WORKSPACE`) to act in one of them. A workspace you create does not get the free monthly credit. You can own at most 20. |
 
 ## 📖 Documentation
 

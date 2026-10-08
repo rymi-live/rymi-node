@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 2.3.0
+
+- New `workspace` client option (or the `RYMI_WORKSPACE` environment variable): every
+  request acts in that workspace by sending the `Rymi-Workspace` header. Without it, a
+  request acts in the key's own workspace, as before.
+- New `workspaces` resource: `list()` (marks the current one), `create({ name,
+  operating_country })` and `update(id, { name, operating_country })`.
+
 ## 2.2.0
 
 - New `campaigns.intake` resource for a campaign's lead-intake URL: `get(id)`,

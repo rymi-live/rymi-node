@@ -1,6 +1,6 @@
 {
   "name": "@rymi/node",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "The official Node.js REST API wrapper for Rymi.",
   "license": "MIT",
   "author": "Rymi AI <engineering@rymi.live>",

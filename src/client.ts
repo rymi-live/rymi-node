@@ -14,6 +14,12 @@ export interface ClientOptions {
      * network socket (e.g. Fastify app.inject). Defaults to global fetch.
      */
     fetch?: typeof globalThis.fetch;
+
+    /**
+     * Act in this workspace (sent as `Rymi-Workspace`). Defaults to the
+     * `RYMI_WORKSPACE` environment variable, else the key's own workspace.
+     */
+    workspace?: string;
 }
 
 export class RymiError extends Error {
@@ -32,6 +38,7 @@ export class RymiClient {
     private apiKey: string;
     private baseURL: string;
     private fetchImpl: typeof globalThis.fetch;
+    private workspace?: string;
 
     constructor(options?: ClientOptions) {
         // Prefer explicit option, then fallback to environment variable
@@ -49,6 +56,10 @@ export class RymiClient {
         if (this.baseURL.endsWith('/')) {
             this.baseURL = this.baseURL.slice(0, -1);
         }
+
+        this.workspace = options?.workspace
+            || (typeof process !== 'undefined' ? process.env.RYMI_WORKSPACE : undefined)
+            || undefined;
     }
 
     private async request<T>(method: string, path: string, body?: any): Promise<T> {
@@ -59,6 +70,7 @@ export class RymiClient {
             'Accept': 'application/json',
             'User-Agent': 'rymi-node/1.0.0'
         };
+        if (this.workspace) headers['Rymi-Workspace'] = this.workspace;
 
         const init: RequestInit = {
             method,
