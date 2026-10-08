@@ -2,6 +2,14 @@
 
 ## Unreleased
 
+## 2.4.0
+
+- `workspaces.create({ name, parent })` makes a client workspace of an agency workspace you
+  run; the agency pays for its calls. `workspaces.update(id, { spend_cap_cents_monthly })`
+  caps a client's monthly spend in credits.
+- New `workspaces.usage(id, { month })` (calls, minutes and credits for a month) and
+  `listMembers`, `addMember`, `removeMember`.
+
 ## 2.3.0
 
 - New `workspace` client option (or the `RYMI_WORKSPACE` environment variable): every
