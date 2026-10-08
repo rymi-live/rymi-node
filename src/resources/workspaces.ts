@@ -59,6 +59,11 @@ export class WorkspacesResource {
     }
 
     /** Calls, minutes and credits for one month (default: this month, UTC). */
+    /** Deletes an empty workspace (no agents, numbers, calls, campaigns or client workspaces). Owner only; never your first workspace. */
+    public async delete(id: string): Promise<{ ok: true }> {
+        return this.client.delete(`/workspaces/${encodeURIComponent(id)}`);
+    }
+
     public async usage(id: string, params: { month?: string } = {}): Promise<WorkspaceUsage> {
         const query = params.month ? `?month=${encodeURIComponent(params.month)}` : '';
         return this.client.get(`/workspaces/${encodeURIComponent(id)}/usage${query}`);

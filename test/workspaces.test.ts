@@ -41,6 +41,7 @@ describe('workspaces', () => {
         await rymi.workspaces.listMembers('c1');
         await rymi.workspaces.addMember('c1', { email: 'guest@example.com' });
         await rymi.workspaces.removeMember('c1', 'u2');
+        await rymi.workspaces.delete('c1');
         const calls = (global.fetch as any).mock.calls.map((c: any[]) => [c[0], c[1].method, c[1].body ? JSON.parse(c[1].body) : undefined]);
         expect(calls).toEqual([
             ['https://api.rymi.live/v1/workspaces', 'POST', { name: 'Sarang', parent: 'agency-1' }],
@@ -49,6 +50,7 @@ describe('workspaces', () => {
             ['https://api.rymi.live/v1/workspaces/c1/members', 'GET', undefined],
             ['https://api.rymi.live/v1/workspaces/c1/members', 'POST', { email: 'guest@example.com' }],
             ['https://api.rymi.live/v1/workspaces/c1/members/u2', 'DELETE', undefined],
+            ['https://api.rymi.live/v1/workspaces/c1', 'DELETE', undefined],
         ]);
     });
 
