@@ -74,15 +74,15 @@ The client exposes one namespace per resource group:
 | `numbers` | Register and attach phone numbers |
 | `telephony` | Inspect carrier status and provisioned numbers |
 | `keys` | Manage publishable keys |
-| `billing` | Usage summaries and balance |
+| `billing` | Usage summaries, balance, and `setCountry` (billing country, locked after the first paid invoice) |
 | `templates` | Prebuilt agent templates |
 | `webhooks` | Create webhooks and verify incoming signatures |
 | `dnc` | Do-not-call list management |
 | `campaigns` | Outbound/inbound calling campaigns: members, launch/pause, reports, improvement suggestions, inbound routes, and the lead-intake URL (`campaigns.intake`) |
 | `contacts` | Contacts and per-channel consent |
-| `compliance` | Compliance attestations (e.g. an external DNC scrub) |
+| `compliance` | Attestations, plus workspace settings: `getSettings`, `updateSettings`, `previewSettings` |
 | `toolSecrets` | Secrets for API-tool headers, referenced as `{{secrets.NAME}}` |
-| `workspaces` | List, create and update workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`) to act in one of them. |
+| `workspaces` | List, create and update workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`), or call `withWorkspace(id)`, to act in one of them. |
 
 ## 📖 Documentation
 

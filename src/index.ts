@@ -16,6 +16,7 @@ import { WorkspacesResource } from './resources/workspaces';
 
 export class Rymi {
     private client: RymiClient;
+    private options?: ClientOptions;
 
     public agents: AgentsResource;
     public calls: CallsResource;
@@ -33,6 +34,7 @@ export class Rymi {
     public workspaces: WorkspacesResource;
 
     constructor(options?: ClientOptions) {
+        this.options = options;
         this.client = new RymiClient(options);
 
         // Initialize API Sub-modules
@@ -50,6 +52,11 @@ export class Rymi {
         this.compliance = new ComplianceResource(this.client);
         this.toolSecrets = new ToolSecretsResource(this.client);
         this.workspaces = new WorkspacesResource(this.client);
+    }
+
+    /** The same client acting in another workspace: `rymi.withWorkspace(id).calls.create(…)`. */
+    public withWorkspace(workspace: string): Rymi {
+        return new Rymi({ ...this.options, workspace });
     }
 }
 

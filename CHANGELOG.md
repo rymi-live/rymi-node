@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+- `withWorkspace(id)` returns a client that sends `Rymi-Workspace` on every request.
+- Compliance settings: `compliance.getSettings`, `updateSettings`, and `previewSettings`.
+- `billing.setCountry` sets the billing country. Locked after the first paid invoice (`409` `billing_country_locked`).
+
 ## 2.4.0
 
 - `workspaces.create({ name, parent })` makes a client workspace of an agency workspace you

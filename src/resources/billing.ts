@@ -44,4 +44,9 @@ export class BillingResource {
     public async setAlerts(data: { thresholds_usd?: number[]; low_balance_pct?: number; email_enabled?: boolean }): Promise<{ ok: true }> {
         return this.client.put('/billing/alerts', data);
     }
+
+    /** Set the billing country. Locked after the first paid invoice (409 billing_country_locked). */
+    public async setCountry(billingCountry: string): Promise<{ ok: true; billing_country: string }> {
+        return this.client.put('/billing/country', { billing_country: billingCountry });
+    }
 }

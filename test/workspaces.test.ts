@@ -51,4 +51,29 @@ describe('workspaces', () => {
             ['https://api.rymi.live/v1/workspaces/c1/members/u2', 'DELETE', undefined],
         ]);
     });
+
+    it('withWorkspace acts in another workspace with the same key', async () => {
+        const rymi = new Rymi({ apiKey: 'rymi_x' });
+        await rymi.withWorkspace('c1').agents.list();
+        await rymi.agents.list();
+        const calls = (global.fetch as any).mock.calls;
+        expect(calls[0][1].headers['Rymi-Workspace']).toBe('c1');
+        expect(calls[0][1].headers.Authorization).toBe('Bearer rymi_x');
+        expect(calls[1][1].headers['Rymi-Workspace']).toBeUndefined();
+    });
+
+    it('reads and updates compliance settings and the billing country', async () => {
+        const rymi = new Rymi({ apiKey: 'rymi_x' });
+        await rymi.compliance.getSettings();
+        await rymi.compliance.updateSettings({ operating_country: 'IN', rules: { apply_to_single_calls: true } });
+        await rymi.compliance.previewSettings('US');
+        await rymi.billing.setCountry('IN');
+        const calls = (global.fetch as any).mock.calls.map((c: any[]) => [c[0], c[1].method, c[1].body ? JSON.parse(c[1].body) : undefined]);
+        expect(calls).toEqual([
+            ['https://api.rymi.live/v1/compliance/settings', 'GET', undefined],
+            ['https://api.rymi.live/v1/compliance/settings', 'PUT', { operating_country: 'IN', rules: { apply_to_single_calls: true } }],
+            ['https://api.rymi.live/v1/compliance/settings/preview?country=US', 'GET', undefined],
+            ['https://api.rymi.live/v1/billing/country', 'PUT', { billing_country: 'IN' }],
+        ]);
+    });
 });
