@@ -82,7 +82,7 @@ The client exposes one namespace per resource group:
 | `contacts` | Contacts and per-channel consent |
 | `compliance` | Attestations, plus workspace settings: `getSettings`, `updateSettings`, `previewSettings` |
 | `toolSecrets` | Secrets for API-tool headers, referenced as `{{secrets.NAME}}` |
-| `workspaces` | List, create and update workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`), or call `withWorkspace(id)`, to act in one of them. |
+| `workspaces` | List, create, update and delete (`delete(id)`, empty workspaces only) workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`), or call `withWorkspace(id)`, to act in one of them. |
 
 ## 📖 Documentation
 
