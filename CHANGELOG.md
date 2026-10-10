@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.7.0
+
 - **Breaking:** `Workspace.role` and `WorkspaceMember.role` no longer include `'owner'`. Workspace roles are `admin`, `editor`, `client` and `viewer`; `Workspace.role` is `null` for a Billing member with no workspace role.
 - **Breaking:** `billing.setAutoRecharge`, `billing.setAlerts` and `billing.setCountry` return `403` for every API key. Top up and change billing in Studio.
 - Accounts and scoped keys: `accounts.list`, `get`, `update`, `members`, and `workspaces`; `keys.create({ kind, scopes, label })` and `keys.self()`.
