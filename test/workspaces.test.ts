@@ -33,6 +33,13 @@ describe('workspaces', () => {
         expect([calls[2][0], calls[2][1].method]).toEqual(['https://api.rymi.live/v1/workspaces/w2', 'PATCH']);
     });
 
+    it('creates a workspace in a named account', async () => {
+        await new Rymi({ apiKey: 'rymi_x' }).workspaces.create({ name: 'Sarang', account: 'acct-1' });
+        const [url, init] = (global.fetch as any).mock.calls[0];
+        expect([url, init.method, JSON.parse(init.body)]).toEqual(
+            ['https://api.rymi.live/v1/workspaces', 'POST', { name: 'Sarang', account: 'acct-1' }]);
+    });
+
     it('creates client workspaces, sets caps, reads usage and manages members', async () => {
         const rymi = new Rymi({ apiKey: 'rymi_x' });
         await rymi.workspaces.create({ name: 'Sarang', parent: 'agency-1' });

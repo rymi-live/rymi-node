@@ -73,7 +73,7 @@ The client exposes one namespace per resource group:
 | `calls` | Place, list, and observe calls; fetch transcripts and recordings |
 | `numbers` | Register and attach phone numbers |
 | `telephony` | Inspect carrier status and provisioned numbers |
-| `keys` | Manage publishable keys |
+| `keys` | Create a secret key (`create({ kind, scopes, label })`, response field `key`) and read it (`self()`). Also manage publishable keys |
 | `billing` | Usage summaries, balance, and `setCountry` (billing country, locked after the first paid invoice) |
 | `templates` | Prebuilt agent templates |
 | `webhooks` | Create webhooks and verify incoming signatures |
@@ -82,7 +82,8 @@ The client exposes one namespace per resource group:
 | `contacts` | Contacts and per-channel consent |
 | `compliance` | Attestations, plus workspace settings: `getSettings`, `updateSettings`, `previewSettings` |
 | `toolSecrets` | Secrets for API-tool headers, referenced as `{{secrets.NAME}}` |
-| `workspaces` | List, create, update and delete (`delete(id)`, empty workspaces only) workspaces, including client workspaces (`create({ name, parent })`) that your agency pays for, with a monthly `spend_cap_cents_monthly`. `usage(id, { month })` for invoicing; `listMembers`, `addMember`, `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`), or call `withWorkspace(id)`, to act in one of them. |
+| `accounts` | List and rename accounts; `members.list`, `members.add`, `members.update`, `members.remove`; `workspaces(id)` for this month's calls, minutes, and credits |
+| `workspaces` | List, create, update, and delete empty workspaces (`delete(id)`, account Owner; `cannot_delete_primary` for the primary). `usage(id, { month })`; `listMembers`, `addMember` (`admin`, `editor`, `client`, `viewer`), `removeMember`. Pass `workspace` (or `RYMI_WORKSPACE`), or call `withWorkspace(id)`. An account key may name any workspace in its account |
 
 ## 📖 Documentation
 
