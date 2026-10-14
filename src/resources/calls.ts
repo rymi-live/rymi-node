@@ -189,7 +189,7 @@ export class CallsResource {
         return this.client.post(`/calls/${callId}/end`);
     }
 
-    /** Add one or more participants to an in-progress call (warm transfer / conference). */
+    /** Add one or more participants to a live call. */
     public async addParticipants(
         callId: string,
         data: { participants: CreateCallParams['participants'] }
