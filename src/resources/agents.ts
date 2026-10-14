@@ -12,7 +12,7 @@ export interface CreateAgentParams {
     advanced?: any;
     features?: any;
     post_call?: any;
-    llm_provider?: 'gemini' | 'openai' | 'anthropic' | 'sarvam';
+    llm_provider?: 'gemini' | 'openai' | 'anthropic' | 'sarvam' | 'groq' | 'xai' | 'ultravox';
     llm_model?: string;
     llm_fallback_provider?: string | null;
     llm_fallback_model?: string | null;
@@ -47,7 +47,7 @@ export interface UpdateAgentParams {
     advanced?: any;
     features?: any;
     post_call?: any;
-    llm_provider?: 'gemini' | 'openai' | 'anthropic' | 'sarvam';
+    llm_provider?: 'gemini' | 'openai' | 'anthropic' | 'sarvam' | 'groq' | 'xai' | 'ultravox';
     llm_model?: string;
     llm_fallback_provider?: string | null;
     llm_fallback_model?: string | null;
