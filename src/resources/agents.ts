@@ -114,6 +114,9 @@ export interface PublishAgentResponse {
     /** Present when published — the frozen snapshot id and timestamp. */
     snapshot_id?: string | null;
     published_at?: string | null;
+    version_id?: string | null;
+    version?: number | null;
+    environment?: 'production' | 'staging';
     /** Present when published: false because of unresolved blockers. */
     reason?: string;
     blockers?: PublishValidationIssue[];
@@ -304,8 +307,20 @@ export class AgentsResource {
      * Returns `{ published: false, blockers }` (HTTP 200) when blockers remain —
      * inspect `blockers` rather than relying on a thrown error.
      */
-    public async publish(agentId: string): Promise<PublishAgentResponse> {
-        return this.client.post<PublishAgentResponse>(`/agents/${agentId}/publish`, {});
+    public async publish(agentId: string, body: { environment?: 'production' | 'staging'; label?: string | null } = {}): Promise<PublishAgentResponse> {
+        return this.client.post<PublishAgentResponse>(`/agents/${agentId}/publish`, body);
+    }
+
+    public async listVersions(agentId: string): Promise<{
+        versions: Array<{ id: string; version: number; label: string | null; content_hash: string; created_at: string; environments: Array<'production' | 'staging'> }>;
+        production_version_id: string | null;
+        staging_version_id: string | null;
+    }> {
+        return this.client.get(`/agents/${agentId}/versions`);
+    }
+
+    public async pointEnvironment(agentId: string, environment: 'production' | 'staging', versionId: string): Promise<{ environment: 'production' | 'staging'; version_id: string; version: number }> {
+        return this.client.post(`/agents/${agentId}/environments/${environment}`, { version_id: versionId });
     }
 
     /**
