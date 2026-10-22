@@ -216,6 +216,27 @@ export interface AgentChange {
     [key: string]: any;
 }
 
+export interface AgentTaskCallReturnField {
+    name: string;
+    description: string;
+    type?: 'string' | 'number' | 'boolean';
+}
+
+export interface AgentTaskCallParams {
+    to: string;
+    on_behalf_of: string;
+    instructions: string;
+    return_fields: AgentTaskCallReturnField[];
+    opening_line?: string;
+    from_number?: string;
+}
+
+export interface AgentTaskCallResponse {
+    call_id: string;
+    agent_id: string;
+    status: string;
+}
+
 function normalizeAgentPayload<T extends CreateAgentParams | UpdateAgentParams>(data: T): Omit<T, 'prompt'> & { system_prompt?: string } {
     const { prompt, ...rest } = data as any;
     return {
@@ -243,6 +264,16 @@ export class AgentsResource {
      */
     public async retrieve(agentId: string): Promise<Agent> {
         return this.client.get<Agent>(`/agents/${agentId}`);
+    }
+
+    /**
+     * Place a one-shot task call through an opted-in agent.
+     */
+    public async placeTaskCall(
+        agentId: string,
+        body: AgentTaskCallParams,
+    ): Promise<AgentTaskCallResponse> {
+        return this.client.post<AgentTaskCallResponse>(`/agents/${agentId}/task-calls`, body);
     }
 
     /**
