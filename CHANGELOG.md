@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2.7.2
+
+- Includes `background_sound`, `background_sound_volume`, `background_sound_url`, and `voice_focus` in `AgentAdvancedConfig` (`AGENT_CONFIG_SCHEMA_VERSION = '2026-10-23'`).
+
 ## 2.7.1
 
 - `calls.addParticipants` documents adding one or more participants to a live call.
