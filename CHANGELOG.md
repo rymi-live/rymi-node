@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 2.8.0
+
+- `calls.create` takes `test: true`. Rymi stores the call as a test (`metadata.source` `mcp_test`), caps it at 5 minutes, and dials from the shared test number when you omit `from_number`. The destination must be a number you confirmed on WhatsApp. Publishable keys cannot use it.
+
 ## 2.7.2
 
 - Includes `background_sound`, `background_sound_volume`, `background_sound_url`, and `voice_focus` in `AgentAdvancedConfig` (`AGENT_CONFIG_SCHEMA_VERSION = '2026-10-23'`).
