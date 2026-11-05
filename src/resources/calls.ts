@@ -52,6 +52,9 @@ export interface CreateCallParams {
     metadata?: Record<string, any>;
     variables?: Record<string, any>;
     post_call?: Record<string, any>;
+    /** Test call (not for publishable keys): marks metadata.source as mcp_test and uses the shared test number when no from_number is set. */
+    test?: boolean;
+    use_test_pool?: boolean;
 }
 
 export interface BatchCallParams {
