@@ -22,6 +22,19 @@ export interface ClientOptions {
     workspace?: string;
 }
 
+/** Prefer the human `message`. Fall back to `error` when that is all the body has. */
+export function apiErrorBody(data: unknown, fallback: string): { message: string; code?: string } {
+    if (typeof data === 'string' && data) return { message: data };
+    if (!data || typeof data !== 'object') return { message: fallback };
+    const body = data as { error?: unknown; message?: unknown; code?: unknown };
+    const message = typeof body.message === 'string' && body.message
+        ? body.message
+        : typeof body.error === 'string' && body.error
+            ? body.error
+            : fallback;
+    return { message, code: typeof body.code === 'string' ? body.code : undefined };
+}
+
 export class RymiError extends Error {
     public status?: number;
     public code?: string;
@@ -89,9 +102,8 @@ export class RymiClient {
             const data = isJson ? await response.json() : await response.text();
 
             if (!response.ok) {
-                const message = (data && typeof data === 'object' && 'error' in data) ? (data as any).error : 
-                               (typeof data === 'string' ? data : response.statusText);
-                throw new RymiError(message, response.status, (data && typeof data === 'object' && 'code' in data) ? (data as any).code : undefined);
+                const parsed = apiErrorBody(data, response.statusText);
+                throw new RymiError(parsed.message, response.status, parsed.code);
             }
 
             return data as T;

@@ -14,6 +14,7 @@ import { ComplianceResource } from './resources/compliance';
 import { ToolSecretsResource } from './resources/toolSecrets';
 import { WorkspacesResource } from './resources/workspaces';
 import { AccountsResource } from './resources/accounts';
+import { PhoneConfirmationResource } from './resources/phoneConfirmation';
 
 export class Rymi {
     private client: RymiClient;
@@ -34,6 +35,7 @@ export class Rymi {
     public toolSecrets: ToolSecretsResource;
     public workspaces: WorkspacesResource;
     public accounts: AccountsResource;
+    public phoneConfirmation: PhoneConfirmationResource;
 
     constructor(options?: ClientOptions) {
         this.options = options;
@@ -55,6 +57,7 @@ export class Rymi {
         this.toolSecrets = new ToolSecretsResource(this.client);
         this.workspaces = new WorkspacesResource(this.client);
         this.accounts = new AccountsResource(this.client);
+        this.phoneConfirmation = new PhoneConfirmationResource(this.client);
     }
 
     /** The same client acting in another workspace: `rymi.withWorkspace(id).calls.create(…)`. */
@@ -80,6 +83,7 @@ export * from './resources/compliance';
 export * from './resources/toolSecrets';
 export * from './resources/workspaces';
 export * from './resources/accounts';
+export * from './resources/phoneConfirmation';
 
 // Re-export the curated public type surface (see @rymi/sdk-types).
 export * from '@rymi/sdk-types';
