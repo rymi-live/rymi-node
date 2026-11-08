@@ -23,27 +23,34 @@ export interface ClientOptions {
 }
 
 /** Prefer the human `message`. Fall back to `error` when that is all the body has. */
-export function apiErrorBody(data: unknown, fallback: string): { message: string; code?: string } {
+export function apiErrorBody(data: unknown, fallback: string): { message: string; code?: string; retryAfter?: number } {
     if (typeof data === 'string' && data) return { message: data };
     if (!data || typeof data !== 'object') return { message: fallback };
-    const body = data as { error?: unknown; message?: unknown; code?: unknown };
+    const body = data as { error?: unknown; message?: unknown; code?: unknown; retry_after?: unknown };
     const message = typeof body.message === 'string' && body.message
         ? body.message
         : typeof body.error === 'string' && body.error
             ? body.error
             : fallback;
-    return { message, code: typeof body.code === 'string' ? body.code : undefined };
+    return {
+        message,
+        code: typeof body.code === 'string' ? body.code : undefined,
+        ...(typeof body.retry_after === 'number' ? { retryAfter: body.retry_after } : {}),
+    };
 }
 
 export class RymiError extends Error {
     public status?: number;
     public code?: string;
+    /** Seconds to wait, when the API sent a cooldown. */
+    public retryAfter?: number;
 
-    constructor(message: string, status?: number, code?: string) {
+    constructor(message: string, status?: number, code?: string, retryAfter?: number) {
         super(message);
         this.name = 'RymiError';
         this.status = status;
         this.code = code;
+        this.retryAfter = retryAfter;
     }
 }
 
@@ -103,7 +110,7 @@ export class RymiClient {
 
             if (!response.ok) {
                 const parsed = apiErrorBody(data, response.statusText);
-                throw new RymiError(parsed.message, response.status, parsed.code);
+                throw new RymiError(parsed.message, response.status, parsed.code, parsed.retryAfter);
             }
 
             return data as T;

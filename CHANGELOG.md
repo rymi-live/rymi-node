@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- `phoneConfirmation.requestCode({ phone })` sends a WhatsApp code to a shared-test-line destination. `phoneConfirmation.status` also reports a code that is waiting. A person types the code at `entry_url`; no secret key can submit one.
+- `RymiError.retryAfter` carries the API's `retry_after` seconds.
+
 ## 2.9.0
 
 - `phoneConfirmation.start({ phone })` and `phoneConfirmation.status(phone)` start and check WhatsApp confirmation for a shared-test-line destination. `start` does not confirm the number.
