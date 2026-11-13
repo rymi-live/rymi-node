@@ -342,6 +342,20 @@ export class AgentsResource {
         return this.client.post<PublishAgentResponse>(`/agents/${agentId}/publish`, body);
     }
 
+    public async pendingPublish(agentId: string): Promise<{
+        agent_id: string;
+        pending_publish: {
+            id: string;
+            status: 'pending' | 'approved' | 'rejected' | 'stale';
+            summary: Record<string, unknown> | null;
+            review_note: string | null;
+            reviewed_at: string | null;
+            created_at: string;
+        } | null;
+    }> {
+        return this.client.get(`/agents/${agentId}/pending-publish`);
+    }
+
     public async listVersions(agentId: string): Promise<{
         versions: Array<{ id: string; version: number; label: string | null; content_hash: string; created_at: string; environments: Array<'production' | 'staging'> }>;
         production_version_id: string | null;

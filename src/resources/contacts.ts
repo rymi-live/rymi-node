@@ -121,4 +121,17 @@ export class ContactsResource {
     public async setConsent(contactId: string, data: SetConsentParams): Promise<SetConsentResponse> {
         return this.client.patch(`/contacts/${contactId}/consent`, data);
     }
+
+    /** Record voice consent by phone number with required evidence and audit log. */
+    public async recordConsent(data: {
+        phone: string;
+        granted?: boolean;
+        source: string;
+        method?: string;
+        consent_text: string;
+        captured_at?: string;
+        name?: string;
+    }): Promise<{ contact_id: string; phone: string; channel: 'voice'; consent: Record<string, unknown> }> {
+        return this.client.post('/contacts/consent', data);
+    }
 }

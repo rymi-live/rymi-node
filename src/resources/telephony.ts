@@ -31,4 +31,64 @@ export class TelephonyResource {
     public async numbers(): Promise<{ numbers: any[] }> {
         return this.client.get('/telephony/numbers');
     }
+
+    public async line(): Promise<{
+        has_line: boolean;
+        line: {
+            id: string;
+            country: 'IN' | 'US';
+            status: string;
+            phone_number: string | null;
+            kyc_status: string;
+            kyc_rejection_reason: string | null;
+            kyc_missing: string[];
+            terms_accepted: boolean;
+            terms_version: string | null;
+            outbound_suspended: boolean;
+            suspended_reason: string | null;
+            max_concurrent_calls: number | null;
+            max_minutes_per_day: number | null;
+            rental_paid_through: string | null;
+            unpaid_since: string | null;
+            release_at: string | null;
+        } | null;
+    }> {
+        return this.client.get('/telephony/line');
+    }
+
+    public async requestLine(params: {
+        country: 'IN' | 'US';
+        handoff?: 'studio' | 'whatsapp' | 'both';
+    }): Promise<{
+        line_id: string;
+        country: 'IN' | 'US';
+        status: string;
+        studio_url: string;
+        whatsapp_handoff_sent: boolean;
+    }> {
+        return this.client.post('/telephony/line/request', params);
+    }
+
+    public async acceptLineTerms(): Promise<{
+        ok: boolean;
+        line_id: string;
+        terms_version: string;
+        terms_url: string;
+    }> {
+        return this.client.post('/telephony/line/accept-terms', {});
+    }
+
+    public async submitLineKyc(params: {
+        fields?: Record<string, string>;
+        document?: { filename: string; mime_type: string; content_base64: string };
+        submit?: boolean;
+    }): Promise<{
+        ok: boolean;
+        line_id: string;
+        kyc_status: string;
+        kyc_missing: string[];
+        submitted: boolean;
+    }> {
+        return this.client.post('/telephony/line/kyc', params);
+    }
 }
