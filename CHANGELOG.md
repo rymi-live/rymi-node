@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.12.0
+
 - `billing.listPlans()`, `billing.getPlan()`, `billing.cancelPlan()` and `billing.downgradePlan({ plan_id })` for monthly plans. `listPlans`, `cancelPlan` and `downgradePlan` return 404 until monthly plans go on sale.
 
 ## 2.11.0
