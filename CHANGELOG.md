@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 2.11.0
+
+- Phone line from Rymi: `telephony.line()`, `telephony.requestLine({ country, handoff })`, `telephony.acceptLineTerms()` and `telephony.submitLineKyc({ fields, document, submit })`.
+- `agents.pendingPublish(agentId)` returns the latest held edit for an agent on a phone line from Rymi.
+- `contacts.recordConsent({ phone, source, consent_text })` records voice consent by phone number and appends a `consent_events` audit row.
+
 ## 2.10.0
 
 - `phoneConfirmation.requestCode({ phone })` sends a WhatsApp code to a shared-test-line destination. `phoneConfirmation.status` also reports a code that is waiting. A person types the code at `entry_url`; no secret key can submit one.
