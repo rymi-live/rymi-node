@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `billing.listPlans()`, `billing.getPlan()`, `billing.cancelPlan()` and `billing.downgradePlan({ plan_id })` for monthly plans. `listPlans`, `cancelPlan` and `downgradePlan` return 404 until monthly plans go on sale.
+
 ## 2.11.0
 
 - Phone line from Rymi: `telephony.line()`, `telephony.requestLine({ country, handoff })`, `telephony.acceptLineTerms()` and `telephony.submitLineKyc({ fields, document, submit })`.

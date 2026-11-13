@@ -75,7 +75,7 @@ The client exposes one namespace per resource group:
 | `numbers` | Register and attach phone numbers |
 | `telephony` | Inspect carrier status and provisioned numbers; for a phone line from Rymi, `line()`, `requestLine({ country })`, `acceptLineTerms()` and `submitLineKyc({ fields, document, submit })` |
 | `keys` | Create a secret key (`create({ kind, scopes, label })`, response field `key`) and read it (`self()`). Also manage publishable keys |
-| `billing` | Usage summaries, balance, and `setCountry` (billing country, locked after the first paid invoice) |
+| `billing` | Usage summaries, balance, `setCountry` (billing country, locked after the first paid invoice), and monthly plans: `listPlans`, `getPlan`, `cancelPlan`, `downgradePlan` |
 | `templates` | Prebuilt agent templates |
 | `webhooks` | Create webhooks and verify incoming signatures |
 | `dnc` | Do-not-call list management |

@@ -49,4 +49,24 @@ export class BillingResource {
     public async setCountry(billingCountry: string): Promise<{ ok: true; billing_country: string }> {
         return this.client.put('/billing/country', { billing_country: billingCountry });
     }
+
+    /** List available monthly plans (Starter, Scale, Business). Returns 404 when RYMI_PLANS is off. */
+    public async listPlans(): Promise<Record<string, any>> {
+        return this.client.get('/billing/plans');
+    }
+
+    /** Get the account's current plan and credit state. */
+    public async getPlan(): Promise<Record<string, any>> {
+        return this.client.get('/billing/plan');
+    }
+
+    /** Turn off auto-renewal on the current monthly plan so it expires to Pay As You Go. */
+    public async cancelPlan(): Promise<Record<string, any>> {
+        return this.client.post('/billing/plan/cancel', {});
+    }
+
+    /** Schedule a downgrade to a cheaper plan (free, starter, or scale) at the next renewal. */
+    public async downgradePlan(data: { plan_id: 'free' | 'starter' | 'scale' }): Promise<Record<string, any>> {
+        return this.client.post('/billing/plan/downgrade', data);
+    }
 }
