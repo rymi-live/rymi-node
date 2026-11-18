@@ -35,4 +35,22 @@ describe('CallsResource action methods', () => {
       expect.objectContaining({ method: 'POST', body: JSON.stringify(body) })
     );
   });
+
+  it('encodes the call id in URL path segments', async () => {
+    mockJson({ status: 'reprocessing' });
+    const rymi = new Rymi({ apiKey: 'rymi_test' });
+    await rymi.calls.reprocess('../campaigns/abc/launch#');
+    expect((global.fetch as any).mock.calls[0][0]).toBe(
+      'https://api.rymi.live/v1/calls/..%2Fcampaigns%2Fabc%2Flaunch%23/reprocess'
+    );
+  });
+
+  it('leaves a normal uuid unchanged', async () => {
+    mockJson({ id: '11111111-1111-4111-8111-1111111111a9' });
+    const rymi = new Rymi({ apiKey: 'rymi_test' });
+    await rymi.calls.retrieve('11111111-1111-4111-8111-1111111111a9');
+    expect((global.fetch as any).mock.calls[0][0]).toBe(
+      'https://api.rymi.live/v1/calls/11111111-1111-4111-8111-1111111111a9'
+    );
+  });
 });

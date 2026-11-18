@@ -188,6 +188,15 @@ describe('CampaignsResource', () => {
     );
   });
 
+  it('encodes campaign and suggestion ids', async () => {
+    mockJson({ suggestion: { id: 'sug_1', status: 'accepted' } });
+    const rymi = new Rymi({ apiKey: 'rymi_test' });
+    await rymi.campaigns.acceptSuggestion('a/b', 'c?d');
+    expect((global.fetch as any).mock.calls[0][0]).toBe(
+      `${BASE}/campaigns/a%2Fb/suggestions/c%3Fd/accept`
+    );
+  });
+
   it('dismissSuggestion() posts to /campaigns/:id/suggestions/:sid/dismiss', async () => {
     mockJson({ suggestion: { id: 'sug_1', status: 'dismissed' } });
     const rymi = new Rymi({ apiKey: 'rymi_test' });

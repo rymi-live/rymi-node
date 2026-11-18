@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Encode all call, campaign, webhook, and agent path ID parameters with `encodeURIComponent`.
+
 ## 2.13.0
 
 - `rymi.bugReports.create / list / retrieve`: report a bug and follow its review status (`pending_review` → `approved` → `fixed`).

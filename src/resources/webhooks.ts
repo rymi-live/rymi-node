@@ -33,12 +33,12 @@ export class WebhooksResource {
 
     /** Update a webhook. Only provided fields change. Pass `secret` to rotate it. */
     public async update(id: string, data: { url?: string; events?: string[]; secret?: string; alert_email?: string | null }): Promise<{ status: 'updated'; id: string }> {
-        return this.client.patch(`/webhooks/${id}`, data);
+        return this.client.patch(`/webhooks/${encodeURIComponent(id)}`, data);
     }
 
     /** Delete a webhook endpoint. */
     public async delete(id: string): Promise<{ status: 'deleted'; id: string }> {
-        return this.client.delete(`/webhooks/${id}`);
+        return this.client.delete(`/webhooks/${encodeURIComponent(id)}`);
     }
     /**
      * Verifies that a webhook received by your backend was genuinely dispatched by Rymi.

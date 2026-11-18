@@ -144,7 +144,7 @@ export class CallsResource {
      * Retrieve details, transcripts, and analysis of a single call by its unique ID.
      */
     public async retrieve(callId: string): Promise<CallRecord> {
-        return this.client.get<CallRecord>(`/calls/${callId}`);
+        return this.client.get<CallRecord>(`/calls/${encodeURIComponent(callId)}`);
     }
 
     /**
@@ -172,24 +172,24 @@ export class CallsResource {
     }
 
     public async summary(callId: string): Promise<Record<string, any>> {
-        return this.client.get(`/calls/${callId}/summary`);
+        return this.client.get(`/calls/${encodeURIComponent(callId)}/summary`);
     }
 
     public async transcript(callId: string): Promise<Record<string, any>> {
-        return this.client.get(`/calls/${callId}/transcript`);
+        return this.client.get(`/calls/${encodeURIComponent(callId)}/transcript`);
     }
 
     public async recording(callId: string): Promise<Record<string, any>> {
-        return this.client.get(`/calls/${callId}/recording`);
+        return this.client.get(`/calls/${encodeURIComponent(callId)}/recording`);
     }
 
     public async reprocess(callId: string): Promise<Record<string, any>> {
-        return this.client.post(`/calls/${callId}/reprocess`);
+        return this.client.post(`/calls/${encodeURIComponent(callId)}/reprocess`);
     }
 
     /** Force-end an active call. Irreversible — closes the LiveKit room and triggers post-call processing. */
     public async end(callId: string): Promise<{ status: string; id: string; message: string }> {
-        return this.client.post(`/calls/${callId}/end`);
+        return this.client.post(`/calls/${encodeURIComponent(callId)}/end`);
     }
 
     /** Add one or more participants to a live call. */
@@ -197,7 +197,7 @@ export class CallsResource {
         callId: string,
         data: { participants: CreateCallParams['participants'] }
     ): Promise<CreateCallResponse> {
-        return this.client.post(`/calls/${callId}/participants`, data);
+        return this.client.post(`/calls/${encodeURIComponent(callId)}/participants`, data);
     }
 
     public async queueStats(): Promise<Record<string, number>> {

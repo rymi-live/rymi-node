@@ -130,27 +130,27 @@ class CampaignMembersResource {
 
     /** List a campaign's members, paginated. */
     public async list(campaignId: string, params: ListCampaignMembersParams = {}): Promise<CampaignMemberListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/members${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/members${buildQuery(params)}`);
     }
 
     /** Attach existing contacts to a campaign as members. */
     public async add(campaignId: string, data: AddCampaignMembersParams): Promise<{ members: CampaignMember[] }> {
-        return this.client.post(`/campaigns/${campaignId}/members`, data);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/members`, data);
     }
 
     /** Import inline contact rows (JSON or CSV): creates/merges contacts and attaches members in one call. */
     public async import(campaignId: string, data: ImportCampaignMembersParams): Promise<ImportCampaignMembersResponse> {
-        return this.client.post(`/campaigns/${campaignId}/members/import`, data);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/members/import`, data);
     }
 
     /** Update a campaign member (status, variables, next attempt time). */
     public async update(campaignId: string, memberId: string, data: UpdateCampaignMemberParams): Promise<{ member: CampaignMember }> {
-        return this.client.patch(`/campaigns/${campaignId}/members/${memberId}`, data);
+        return this.client.patch(`/campaigns/${encodeURIComponent(campaignId)}/members/${encodeURIComponent(memberId)}`, data);
     }
 
     /** Remove a member from a campaign. */
     public async remove(campaignId: string, memberId: string): Promise<{ status: 'deleted'; id: string }> {
-        return this.client.delete(`/campaigns/${campaignId}/members/${memberId}`);
+        return this.client.delete(`/campaigns/${encodeURIComponent(campaignId)}/members/${encodeURIComponent(memberId)}`);
     }
 }
 
@@ -195,22 +195,22 @@ class CampaignRoutesResource {
 
     /** List a campaign's inbound routing rules. */
     public async list(campaignId: string, params: ListCampaignRoutesParams = {}): Promise<CampaignRouteListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/routes${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/routes${buildQuery(params)}`);
     }
 
     /** Bind an owned phone number to this campaign for inbound routing. Only one active route per number is allowed. */
     public async create(campaignId: string, data: CreateCampaignRouteParams): Promise<{ route: CampaignRoute }> {
-        return this.client.post(`/campaigns/${campaignId}/routes`, data);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/routes`, data);
     }
 
     /** Update an inbound route's schedule or active flag. */
     public async update(campaignId: string, routeId: string, data: UpdateCampaignRouteParams): Promise<{ route: CampaignRoute }> {
-        return this.client.patch(`/campaigns/${campaignId}/routes/${routeId}`, data);
+        return this.client.patch(`/campaigns/${encodeURIComponent(campaignId)}/routes/${encodeURIComponent(routeId)}`, data);
     }
 
     /** Delete an inbound route. */
     public async delete(campaignId: string, routeId: string): Promise<{ status: 'deleted'; id: string }> {
-        return this.client.delete(`/campaigns/${campaignId}/routes/${routeId}`);
+        return this.client.delete(`/campaigns/${encodeURIComponent(campaignId)}/routes/${encodeURIComponent(routeId)}`);
     }
 }
 
@@ -343,22 +343,22 @@ class CampaignIntakeResource {
 
     /** Get the campaign's lead-intake settings, or `intake: null` if it has none. */
     public async get(campaignId: string): Promise<{ intake: CampaignIntake | null }> {
-        return this.client.get(`/campaigns/${campaignId}/intake`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/intake`);
     }
 
     /** Create the lead-intake URL (returned once as `url`), or update its settings (`url: null`). */
     public async set(campaignId: string, settings: CampaignIntakeSettings = {}): Promise<{ intake: CampaignIntake; url: string | null }> {
-        return this.client.put(`/campaigns/${campaignId}/intake`, settings);
+        return this.client.put(`/campaigns/${encodeURIComponent(campaignId)}/intake`, settings);
     }
 
     /** Issue a new URL. The old one stops accepting leads immediately. */
     public async rotate(campaignId: string): Promise<{ intake: CampaignIntake; url: string }> {
-        return this.client.post(`/campaigns/${campaignId}/intake/rotate`, {});
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/intake/rotate`, {});
     }
 
     /** Remove the lead-intake URL. */
     public async disable(campaignId: string): Promise<void> {
-        return this.client.delete(`/campaigns/${campaignId}/intake`);
+        return this.client.delete(`/campaigns/${encodeURIComponent(campaignId)}/intake`);
     }
 }
 
@@ -387,12 +387,12 @@ export class CampaignsResource {
 
     /** Retrieve a single campaign by id. */
     public async get(campaignId: string): Promise<{ campaign: Campaign }> {
-        return this.client.get(`/campaigns/${campaignId}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}`);
     }
 
     /** Update campaign policy/goal fields. Status and lifecycle fields are not writable here. */
     public async update(campaignId: string, data: UpdateCampaignParams): Promise<{ campaign: Campaign }> {
-        return this.client.patch(`/campaigns/${campaignId}`, data);
+        return this.client.patch(`/campaigns/${encodeURIComponent(campaignId)}`, data);
     }
 
     /**
@@ -401,66 +401,66 @@ export class CampaignsResource {
      * transitions status to `running`.
      */
     public async launch(campaignId: string): Promise<LaunchCampaignResponse> {
-        return this.client.post(`/campaigns/${campaignId}/launch`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/launch`);
     }
 
     /** Evaluate launch blockers without launching (dry run). Safe from any status. */
     public async launchBlockers(campaignId: string): Promise<{ blockers: LaunchBlocker[]; launchable: boolean }> {
-        return this.client.get(`/campaigns/${campaignId}/launch-blockers`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/launch-blockers`);
     }
 
     /** Pause a running campaign. In-flight calls finish naturally. */
     public async pause(campaignId: string): Promise<{ campaign: Campaign }> {
-        return this.client.post(`/campaigns/${campaignId}/pause`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/pause`);
     }
 
     /** Resume a paused campaign. */
     public async resume(campaignId: string): Promise<{ campaign: Campaign }> {
-        return this.client.post(`/campaigns/${campaignId}/resume`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/resume`);
     }
 
     /** Archive a campaign. Terminal — the scheduler never selects work for it again. */
     public async archive(campaignId: string): Promise<{ campaign: Campaign }> {
-        return this.client.post(`/campaigns/${campaignId}/archive`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/archive`);
     }
 
     /** Read the campaign report: `stat_*` summary counters + outcome/sentiment/hourly/snapshot distributions. */
     public async report(campaignId: string): Promise<CampaignReportResponse> {
-        return this.client.get(`/campaigns/${campaignId}/report`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/report`);
     }
 
     /** List a campaign's dial attempts, paginated. */
     public async attempts(campaignId: string, params: ListCampaignAttemptsParams = {}): Promise<CampaignAttemptListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/attempts${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/attempts${buildQuery(params)}`);
     }
 
     /** List a campaign's sweep-claim batches, paginated. */
     public async batches(campaignId: string, params: ListCampaignBatchesParams = {}): Promise<CampaignBatchListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/batches${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/batches${buildQuery(params)}`);
     }
 
     /** List a campaign's follow-up jobs, paginated. */
     public async followups(campaignId: string, params: ListCampaignFollowupsParams = {}): Promise<CampaignFollowupListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/followups${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/followups${buildQuery(params)}`);
     }
 
     /** Run the improve engine: detectors gate an LLM proposal writer, persisting new `campaign_suggestions`. */
     public async improve(campaignId: string): Promise<ImproveCampaignResponse> {
-        return this.client.post(`/campaigns/${campaignId}/improve`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/improve`);
     }
 
     /** List a campaign's improvement suggestions, paginated. */
     public async suggestions(campaignId: string, params: ListCampaignSuggestionsParams = {}): Promise<CampaignSuggestionListResponse> {
-        return this.client.get(`/campaigns/${campaignId}/suggestions${buildQuery(params)}`);
+        return this.client.get(`/campaigns/${encodeURIComponent(campaignId)}/suggestions${buildQuery(params)}`);
     }
 
     /** Accept a suggestion: agent-editing suggestions create an agent-changes draft; campaign-policy suggestions patch the campaign. */
     public async acceptSuggestion(campaignId: string, suggestionId: string): Promise<{ suggestion: CampaignSuggestion }> {
-        return this.client.post(`/campaigns/${campaignId}/suggestions/${suggestionId}/accept`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/suggestions/${encodeURIComponent(suggestionId)}/accept`);
     }
 
     /** Dismiss a suggestion without applying it. */
     public async dismissSuggestion(campaignId: string, suggestionId: string): Promise<{ suggestion: CampaignSuggestion }> {
-        return this.client.post(`/campaigns/${campaignId}/suggestions/${suggestionId}/dismiss`);
+        return this.client.post(`/campaigns/${encodeURIComponent(campaignId)}/suggestions/${encodeURIComponent(suggestionId)}/dismiss`);
     }
 }

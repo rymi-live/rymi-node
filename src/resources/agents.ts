@@ -263,7 +263,7 @@ export class AgentsResource {
      * Retrieve a single AI Agent by its unique ID.
      */
     public async retrieve(agentId: string): Promise<Agent> {
-        return this.client.get<Agent>(`/agents/${agentId}`);
+        return this.client.get<Agent>(`/agents/${encodeURIComponent(agentId)}`);
     }
 
     /**
@@ -273,7 +273,7 @@ export class AgentsResource {
         agentId: string,
         body: AgentTaskCallParams,
     ): Promise<AgentTaskCallResponse> {
-        return this.client.post<AgentTaskCallResponse>(`/agents/${agentId}/task-calls`, body);
+        return this.client.post<AgentTaskCallResponse>(`/agents/${encodeURIComponent(agentId)}/task-calls`, body);
     }
 
     /**
@@ -287,14 +287,14 @@ export class AgentsResource {
      * Update an existing AI Agent's persona or configuration.
      */
     public async update(agentId: string, data: UpdateAgentParams): Promise<{ status: 'updated' }> {
-        return this.client.put<{ status: 'updated' }>(`/agents/${agentId}`, normalizeAgentPayload(data));
+        return this.client.put<{ status: 'updated' }>(`/agents/${encodeURIComponent(agentId)}`, normalizeAgentPayload(data));
     }
 
     /**
      * Delete an AI Agent permanently.
      */
     public async delete(agentId: string): Promise<{ status: 'deleted'; id: string }> {
-        return this.client.delete<{ status: 'deleted'; id: string }>(`/agents/${agentId}`);
+        return this.client.delete<{ status: 'deleted'; id: string }>(`/agents/${encodeURIComponent(agentId)}`);
     }
 
     public async llmOptions(): Promise<{ models: any[]; voices: any[] }> {
@@ -314,14 +314,14 @@ export class AgentsResource {
         if (params.offset !== undefined) searchParams.set('offset', String(params.offset));
         if (params.status) searchParams.set('status', params.status);
         const query = searchParams.toString();
-        return this.client.get<AgentCallListResponse>(`/agents/${agentId}/calls${query ? `?${query}` : ''}`);
+        return this.client.get<AgentCallListResponse>(`/agents/${encodeURIComponent(agentId)}/calls${query ? `?${query}` : ''}`);
     }
 
     /**
      * Duplicate an existing agent. The clone gets " (Copy)" appended to its name.
      */
     public async clone(agentId: string): Promise<{ status: 'created'; id: string }> {
-        return this.client.post<{ status: 'created'; id: string }>(`/agents/${agentId}/clone`, {});
+        return this.client.post<{ status: 'created'; id: string }>(`/agents/${encodeURIComponent(agentId)}/clone`, {});
     }
 
     /**
@@ -339,7 +339,7 @@ export class AgentsResource {
      * inspect `blockers` rather than relying on a thrown error.
      */
     public async publish(agentId: string, body: { environment?: 'production' | 'staging'; label?: string | null } = {}): Promise<PublishAgentResponse> {
-        return this.client.post<PublishAgentResponse>(`/agents/${agentId}/publish`, body);
+        return this.client.post<PublishAgentResponse>(`/agents/${encodeURIComponent(agentId)}/publish`, body);
     }
 
     public async pendingPublish(agentId: string): Promise<{
@@ -353,7 +353,7 @@ export class AgentsResource {
             created_at: string;
         } | null;
     }> {
-        return this.client.get(`/agents/${agentId}/pending-publish`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/pending-publish`);
     }
 
     public async listVersions(agentId: string): Promise<{
@@ -361,11 +361,11 @@ export class AgentsResource {
         production_version_id: string | null;
         staging_version_id: string | null;
     }> {
-        return this.client.get(`/agents/${agentId}/versions`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/versions`);
     }
 
     public async pointEnvironment(agentId: string, environment: 'production' | 'staging', versionId: string): Promise<{ environment: 'production' | 'staging'; version_id: string; version: number }> {
-        return this.client.post(`/agents/${agentId}/environments/${environment}`, { version_id: versionId });
+        return this.client.post(`/agents/${encodeURIComponent(agentId)}/environments/${encodeURIComponent(environment)}`, { version_id: versionId });
     }
 
     /**
@@ -396,21 +396,21 @@ export class AgentsResource {
      * List the knowledge sources (RAG context) attached to an agent.
      */
     public async listKnowledgeSources(agentId: string): Promise<{ sources: AgentKnowledgeSource[] }> {
-        return this.client.get(`/agents/${agentId}/knowledge-sources`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/knowledge-sources`);
     }
 
     /**
      * Add a knowledge source to an agent from raw text or a URL.
      */
     public async addKnowledgeSource(agentId: string, data: AddKnowledgeSourceParams): Promise<Record<string, any>> {
-        return this.client.post(`/agents/${agentId}/knowledge-sources`, data);
+        return this.client.post(`/agents/${encodeURIComponent(agentId)}/knowledge-sources`, data);
     }
 
     /**
      * Delete a knowledge source from an agent.
      */
     public async deleteKnowledgeSource(agentId: string, sourceId: string): Promise<Record<string, any>> {
-        return this.client.delete(`/agents/${agentId}/knowledge-sources/${sourceId}`);
+        return this.client.delete(`/agents/${encodeURIComponent(agentId)}/knowledge-sources/${encodeURIComponent(sourceId)}`);
     }
 
     /**
@@ -418,7 +418,7 @@ export class AgentsResource {
      * `link_feature: false` means share links are disabled on this deployment.
      */
     public async getShareLink(agentId: string): Promise<{ link_feature: boolean; link: AgentShareLink | null }> {
-        const res = await this.client.get<{ link_feature: boolean; link: AgentShareLink | null }>(`/agents/${agentId}/testers`);
+        const res = await this.client.get<{ link_feature: boolean; link: AgentShareLink | null }>(`/agents/${encodeURIComponent(agentId)}/testers`);
         return { link_feature: res.link_feature, link: res.link };
     }
 
@@ -426,14 +426,14 @@ export class AgentsResource {
      * Create the agent's public share link, or update its settings if one exists.
      */
     public async setShareLink(agentId: string, settings: AgentShareLinkSettings = {}): Promise<{ link: AgentShareLink }> {
-        return this.client.put(`/agents/${agentId}/share-link`, settings);
+        return this.client.put(`/agents/${encodeURIComponent(agentId)}/share-link`, settings);
     }
 
     /**
      * Issue a new URL for the share link. The old URL stops working immediately.
      */
     public async regenerateShareLink(agentId: string): Promise<{ link: AgentShareLink }> {
-        return this.client.post(`/agents/${agentId}/share-link/regenerate`, {});
+        return this.client.post(`/agents/${encodeURIComponent(agentId)}/share-link/regenerate`, {});
     }
 
     /**
@@ -442,7 +442,7 @@ export class AgentsResource {
      */
     public async listChanges(agentId: string, params: { since?: string } = {}): Promise<{ changes: AgentChange[] }> {
         const query = params.since ? `?since=${encodeURIComponent(params.since)}` : '';
-        return this.client.get(`/agents/${agentId}/changes${query}`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/changes${query}`);
     }
 
     /**
@@ -450,7 +450,7 @@ export class AgentsResource {
      * previous value. Returns the resulting agent snapshot.
      */
     public async undoChange(agentId: string, changeId: string): Promise<{ ok: boolean; changeId: string; agentSnapshot: Agent }> {
-        return this.client.post(`/agents/${agentId}/changes/${changeId}/undo`, {});
+        return this.client.post(`/agents/${encodeURIComponent(agentId)}/changes/${encodeURIComponent(changeId)}/undo`, {});
     }
 
     /**
@@ -465,7 +465,7 @@ export class AgentsResource {
         if (params.mode) query.set('mode', params.mode);
         if (params.judge) query.set('judge', '1');
         const qs = query.toString();
-        return this.client.post(`/agents/${agentId}/evals/run${qs ? `?${qs}` : ''}`, {});
+        return this.client.post(`/agents/${encodeURIComponent(agentId)}/evals/run${qs ? `?${qs}` : ''}`, {});
     }
 
     /**
@@ -487,13 +487,13 @@ export class AgentsResource {
      * List previous evaluation runs for an agent.
      */
     public async listEvalRuns(agentId: string): Promise<Record<string, any>> {
-        return this.client.get(`/agents/${agentId}/evals/runs`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/evals/runs`);
     }
 
     /**
      * Retrieve a single evaluation run, including per-scenario scores.
      */
     public async getEvalRun(agentId: string, runId: string): Promise<Record<string, any>> {
-        return this.client.get(`/agents/${agentId}/evals/runs/${runId}`);
+        return this.client.get(`/agents/${encodeURIComponent(agentId)}/evals/runs/${encodeURIComponent(runId)}`);
     }
 }
