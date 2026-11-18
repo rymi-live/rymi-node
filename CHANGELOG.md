@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.13.0
+
 - `rymi.bugReports.create / list / retrieve`: report a bug and follow its review status (`pending_review` → `approved` → `fixed`).
 
 ## 2.12.0
