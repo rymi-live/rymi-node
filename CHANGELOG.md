@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.14.0
+
 - Encode all call, campaign, webhook, and agent path ID parameters with `encodeURIComponent`.
 
 ## 2.13.0
