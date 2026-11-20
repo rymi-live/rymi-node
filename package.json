@@ -1,17 +1,24 @@
 {
   "name": "@rymi/node",
   "version": "2.14.0",
-  "description": "The official Node.js REST API wrapper for Rymi.",
+  "description": "Node.js SDK for Rymi: build AI voice agents and place outbound phone calls.",
   "license": "MIT",
   "author": "Rymi AI <engineering@rymi.live>",
-  "homepage": "https://rymi.live",
+  "homepage": "https://docs.rymi.live/api/sdk-node",
   "keywords": [
     "voice-ai",
     "voice-agent",
     "ai-agents",
+    "phone-call",
+    "outbound-calls",
+    "voice-api",
+    "conversational-ai",
+    "telephony",
+    "twilio",
+    "plivo",
+    "hindi",
     "text-to-speech",
     "speech-to-text",
-    "telephony",
     "rymi"
   ],
   "repository": {
