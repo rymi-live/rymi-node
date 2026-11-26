@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `rymi.telephony.submitLineKyc()` takes `document.document_type_id`, and `line()` returns `kyc_documents` (one entry per document the carrier requires for India lines).
+
 - `rymi.telephony.activateLine({ agent_id })` buys your Rymi line's number, attaches it to a published agent and charges the first month from credits. `rymi.telephony.line()` now returns `available`, `activation_agent_id` and `monthly_rental_credits`.
 
 ## 2.15.0

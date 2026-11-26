@@ -52,6 +52,13 @@ export class TelephonyResource {
             unpaid_since: string | null;
             release_at: string | null;
             activation_agent_id: string | null;
+            kyc_documents: Array<{
+                document_type_id: string;
+                name: string;
+                description: string;
+                uploaded: boolean;
+                filename: string | null;
+            }> | null;
             monthly_rental_credits: number | null;
         } | null;
         available: { IN: boolean; US: boolean };
@@ -83,7 +90,7 @@ export class TelephonyResource {
 
     public async submitLineKyc(params: {
         fields?: Record<string, string>;
-        document?: { filename: string; mime_type: string; content_base64: string };
+        document?: { filename: string; mime_type: string; content_base64: string; document_type_id?: string };
         submit?: boolean;
     }): Promise<{
         ok: boolean;
