@@ -94,17 +94,17 @@ export class ContactsResource {
 
     /** Retrieve a single tenant-scoped contact by id. */
     public async get(contactId: string): Promise<{ contact: Contact }> {
-        return this.client.get(`/contacts/${contactId}`);
+        return this.client.get(`/contacts/${encodeURIComponent(contactId)}`);
     }
 
     /** Update an existing tenant-scoped contact. Only provided fields change. */
     public async update(contactId: string, data: UpdateContactParams): Promise<{ contact: Contact }> {
-        return this.client.patch(`/contacts/${contactId}`, data);
+        return this.client.patch(`/contacts/${encodeURIComponent(contactId)}`, data);
     }
 
     /** Delete a tenant-scoped contact. */
     public async delete(contactId: string): Promise<{ status: 'deleted'; id: string }> {
-        return this.client.delete(`/contacts/${contactId}`);
+        return this.client.delete(`/contacts/${encodeURIComponent(contactId)}`);
     }
 
     /**
@@ -119,7 +119,7 @@ export class ContactsResource {
     /** Record a consent grant or revoke for one channel, with evidence. Also
      *  appends an immutable row to the consent_events proof log. */
     public async setConsent(contactId: string, data: SetConsentParams): Promise<SetConsentResponse> {
-        return this.client.patch(`/contacts/${contactId}/consent`, data);
+        return this.client.patch(`/contacts/${encodeURIComponent(contactId)}/consent`, data);
     }
 
     /** Record voice consent by phone number with required evidence and audit log. */

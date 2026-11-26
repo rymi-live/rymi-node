@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+- The client warns when constructed in a browser (a secret key there is visible to every visitor). `dangerouslyAllowBrowser: true` silences it.
+- `contacts.get / update / delete / updateConsent` encode the contact id in the path, so an id like `../agents/<id>` can no longer re-target the request.
+
 ## 2.14.0
 
 - Encode all call, campaign, webhook, and agent path ID parameters with `encodeURIComponent`.

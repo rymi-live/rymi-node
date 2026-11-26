@@ -20,6 +20,12 @@ export interface ClientOptions {
      * `RYMI_WORKSPACE` environment variable, else the key's own workspace.
      */
     workspace?: string;
+
+    /**
+     * Allow constructing the client in a browser. A secret key in browser code is visible to every
+     * visitor, so the client warns there unless this is true. Only set it for trusted internal tools.
+     */
+    dangerouslyAllowBrowser?: boolean;
 }
 
 /** Prefer the human `message`. Fall back to `error` when that is all the body has. */
@@ -69,6 +75,14 @@ export class RymiClient {
         }
 
         this.apiKey = key;
+        const g = globalThis as any;
+        if (typeof g.window !== 'undefined' && typeof g.document !== 'undefined' && !options?.dangerouslyAllowBrowser) {
+            console.warn(
+                '[Rymi] RymiClient is running in a browser. Secret keys (rymi_...) give full account access; ' +
+                'keep them on your server and use a publishable key with @rymi/web in the browser. ' +
+                'Pass dangerouslyAllowBrowser: true to silence this warning.'
+            );
+        }
         this.baseURL = options?.baseURL || 'https://api.rymi.live/v1';
         this.fetchImpl = options?.fetch ?? globalThis.fetch;
 
