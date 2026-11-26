@@ -51,7 +51,10 @@ export class TelephonyResource {
             rental_paid_through: string | null;
             unpaid_since: string | null;
             release_at: string | null;
+            activation_agent_id: string | null;
+            monthly_rental_credits: number | null;
         } | null;
+        available: { IN: boolean; US: boolean };
     }> {
         return this.client.get('/telephony/line');
     }
@@ -90,5 +93,20 @@ export class TelephonyResource {
         submitted: boolean;
     }> {
         return this.client.post('/telephony/line/kyc', params);
+    }
+
+    /**
+     * Buy the line's number, attach it to a published agent and charge the first
+     * month from credits. India lines with KYC still in review answer
+     * `{ waiting_for_kyc: true }` and activate once verification is approved.
+     */
+    public async activateLine(params: {
+        agent_id: string;
+        replace_carrier?: boolean;
+    }): Promise<
+        | { ok: true; phone_number: string; charged_credits: number }
+        | { waiting_for_kyc: true }
+    > {
+        return this.client.post('/telephony/line/activate', params);
     }
 }

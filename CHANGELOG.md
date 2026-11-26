@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `rymi.telephony.activateLine({ agent_id })` buys your Rymi line's number, attaches it to a published agent and charges the first month from credits. `rymi.telephony.line()` now returns `available`, `activation_agent_id` and `monthly_rental_credits`.
+
 ## 2.15.0
 
 - `billing.downgradePlan` takes the new plan ids: `'free' | 'solo' | 'team'` (Starter and Business were removed; monthly plans are Solo, Team and Scale).
