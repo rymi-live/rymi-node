@@ -50,7 +50,7 @@ export class BillingResource {
         return this.client.put('/billing/country', { billing_country: billingCountry });
     }
 
-    /** List available monthly plans (Starter, Scale, Business). Returns 404 when RYMI_PLANS is off. */
+    /** List available monthly plans (Solo, Team, Scale). Returns 404 when RYMI_PLANS is off. */
     public async listPlans(): Promise<Record<string, any>> {
         return this.client.get('/billing/plans');
     }
@@ -65,8 +65,8 @@ export class BillingResource {
         return this.client.post('/billing/plan/cancel', {});
     }
 
-    /** Schedule a downgrade to a cheaper plan (free, starter, or scale) at the next renewal. */
-    public async downgradePlan(data: { plan_id: 'free' | 'starter' | 'scale' }): Promise<Record<string, any>> {
+    /** Schedule a downgrade to a cheaper plan (free, solo, or team) at the next renewal. */
+    public async downgradePlan(data: { plan_id: 'free' | 'solo' | 'team' }): Promise<Record<string, any>> {
         return this.client.post('/billing/plan/downgrade', data);
     }
 }
