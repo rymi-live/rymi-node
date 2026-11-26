@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+## 2.15.0
+
+- `billing.downgradePlan` takes the new plan ids: `'free' | 'solo' | 'team'` (Starter and Business were removed; monthly plans are Solo, Team and Scale).
 - The client warns when constructed in a browser (a secret key there is visible to every visitor). `dangerouslyAllowBrowser: true` silences it.
 - `contacts.get / update / delete / updateConsent` encode the contact id in the path, so an id like `../agents/<id>` can no longer re-target the request.
 
