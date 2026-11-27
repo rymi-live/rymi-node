@@ -27,8 +27,8 @@ export interface CallRecord {
     participant_count?: number;
     primary_participant?: Record<string, any> | null;
     total_cost?: number;
-    provider_cost?: number;
-    provider_cost_breakdown?: Record<string, any>;
+    provider_cost?: number | null;
+    provider_cost_breakdown?: Record<string, any> | null;
     provider_cost_calculated_at?: string | null;
     bill_duration?: number;
 }

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- `Call.provider_cost` and `provider_cost_breakdown` are typed `| null`: the API returns `null` for calls on a managed agent.
+
 ## 2.16.0
 
 - `rymi.telephony.releaseLine()` releases your Rymi number and stops its rental. `line()` returns `terms_current`, false when the Phone Number Terms changed since you accepted them.
