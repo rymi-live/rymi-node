@@ -109,7 +109,6 @@ export class TelephonyResource {
      */
     public async activateLine(params: {
         agent_id: string;
-        replace_carrier?: boolean;
     }): Promise<
         | { ok: true; phone_number: string; charged_credits: number }
         | { waiting_for_kyc: true }
