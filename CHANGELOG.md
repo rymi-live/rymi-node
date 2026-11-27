@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 2.16.1
+
 - `Call.provider_cost` and `provider_cost_breakdown` are typed `| null`: the API returns `null` for calls on a managed agent.
 
 ## 2.16.0
