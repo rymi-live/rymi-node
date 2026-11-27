@@ -44,6 +44,7 @@ export class TelephonyResource {
             kyc_missing: string[];
             terms_accepted: boolean;
             terms_version: string | null;
+            terms_current: boolean;
             outbound_suspended: boolean;
             suspended_reason: string | null;
             max_concurrent_calls: number | null;
@@ -114,5 +115,13 @@ export class TelephonyResource {
         | { waiting_for_kyc: true }
     > {
         return this.client.post('/telephony/line/activate', params);
+    }
+
+    /**
+     * Release the line's number back to the carrier and stop its monthly rental.
+     * Final: the same number can't be recovered. A line still setting up is cancelled.
+     */
+    public async releaseLine(): Promise<{ ok: true; released_number: string | null }> {
+        return this.client.post('/telephony/line/release', {});
     }
 }
